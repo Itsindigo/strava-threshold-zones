@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+  personal_site_api_db:
+    image: postgres:12
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_USER=matt
+      - POSTGRES_PASSWORD=topsecret
+    entrypoint: sh -c "
+      echo \"psql -v ON_ERROR_STOP=1 --username matt --dbname postgres <<-EOSQL\n
+      CREATE DATABASE personal_site;\n
+      GRANT ALL PRIVILEGES ON DATABASE personal_site TO matt;\n
+      CREATE DATABASE personal_site_test;\n
+      GRANT ALL PRIVILEGES ON DATABASE personal_site_test TO matt;\nEOSQL\" > /docker-entrypoint-initdb.d/init-databases.sh;
+      docker-entrypoint.sh postgres"
