@@ -9,6 +9,13 @@
   "workspaces": [
     "apps/*"
   ],
+  "scripts": {
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "dev": "turbo run dev",
+    "start-containers": "turbo run start-containers"
+  },
   "devDependencies": {
     "turbo": "^1.6.3"
   }

@@ -4,20 +4,16 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon src/index.ts",
+    "dev": "nodemon src/index.ts",
     "script:backfillStravaActivities": "ts-node src/jobs/backfillStravaActivities.ts",
     "migrate:create": "ts-node migrate create --name",
     "migrate:up": "ts-node migrate up",
     "migrate:down": "ts-node migrate down",
-    "build": "tsc"
+    "build": "tsc",
+    "start-containers": "docker-compose up -d"
   },
   "dependencies": {
     "@slonik/migrator": "^0.11.3",
-    "@types/dotenv": "^8.2.0",
-    "@types/koa-bodyparser": "^4.3.3",
-    "@types/koa-json": "^2.0.20",
-    "@types/koa-pino-logger": "^3.0.0",
-    "@types/node": "^18.11.10",
     "axios": "^0.21.3",
     "dotenv": "^10.0.0",
     "env-var": "^7.0.1",
@@ -33,6 +29,11 @@
     "typescript": "^4.9.3"
   },
   "devDependencies": {
+    "@types/dotenv": "^8.2.0",
+    "@types/koa-bodyparser": "^4.3.3",
+    "@types/koa-json": "^2.0.20",
+    "@types/koa-pino-logger": "^3.0.0",
+    "@types/node": "^18.11.10",
     "@types/koa": "^2.13.4",
     "@types/koa-router": "^7.4.4",
     "ts-node": "^10.9.1"

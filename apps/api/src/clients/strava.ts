@@ -130,7 +130,7 @@ export const getAuthorizedAthlete = async (
 // $ http GET "https://www.strava.com/api/v3/?before=&after=&page=&per_page=" "Authorization: Bearer [[token]]"
 
 export const getActivities = refreshTokenAsNeeded<
-  StravaTokenData & PersistedStravaUser,
+  PersistedStravaUser,
   StravaActivity[]
 >(async ({ expiresAt, refreshToken, accessToken }) => {
   const { data } = await axios.get<StravaActivity[]>(

@@ -13,6 +13,10 @@
     "lint": {
       "outputs": []
     },
+    "start-containers": {},
+    "dev": {
+      "dependsOn": ["start-containers"]
+    },
     "deploy": {
       "dependsOn": ["build", "test", "lint"],
       "outputs": []

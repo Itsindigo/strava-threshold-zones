@@ -1,10 +1,10 @@
 import { saveStravaUser, findStravaUser } from "../repositories/strava_users";
 import { getAuthorizedAthlete, getActivities } from "../clients/strava";
-// import { logger } from "../logger";
 
 export const authorizeAndSaveUser = async (code: string) => {
   const data = await getAuthorizedAthlete(code);
 
+  /* TODO encrypt tokens */
   const user = await saveStravaUser({
     stravaId: data.athlete.id,
     username: data.athlete.username,
