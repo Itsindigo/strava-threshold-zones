@@ -3,7 +3,7 @@ import { sql } from "slonik";
 import { pool } from "../slonik";
 import { TABLE_NAMES } from "../config";
 
-interface StravaUser {
+export interface StravaUser {
   stravaId: number;
   username: string;
   firstName: string;
@@ -13,7 +13,7 @@ interface StravaUser {
   expiresAt: number;
 }
 
-interface PersistedStravaUser extends StravaUser {
+export interface PersistedStravaUser extends StravaUser {
   id: number;
 }
 

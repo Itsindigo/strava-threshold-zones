@@ -8,7 +8,8 @@
     "script:backfillStravaActivities": "ts-node src/jobs/backfillStravaActivities.ts",
     "migrate:create": "ts-node migrate create --name",
     "migrate:up": "ts-node migrate up",
-    "migrate:down": "ts-node migrate down"
+    "migrate:down": "ts-node migrate down",
+    "build": "tsc"
   },
   "dependencies": {
     "@slonik/migrator": "^0.11.3",

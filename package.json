@@ -1,0 +1,15 @@
+{
+  "name": "strava-threshold-zones",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/Itsindigo/strava-threshold-zones.git",
+  "author": "Matthew Bridges <mattbridgesbusiness@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "devDependencies": {
+    "turbo": "^1.6.3"
+  }
+}

@@ -4,7 +4,7 @@ import { getUserActivities } from "../services/strava";
 
 const main = async () => {
   const activities = await getUserActivities(myStravaAthleteId);
-  activities;
+  console.log({ activities: Object.keys(activities) });
 };
 
 main()

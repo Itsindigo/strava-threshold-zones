@@ -2,7 +2,10 @@ import axios from "axios";
 
 import { logger } from "../logger";
 import config from "../config";
-import { updateRefreshToken } from "../repositories/strava_users";
+import {
+  PersistedStravaUser,
+  updateRefreshToken,
+} from "../repositories/strava_users";
 import { unixTime } from "../utils/datetime";
 
 const stravaApiBaseUrl = "https://www.strava.com/api/v3";
@@ -127,7 +130,7 @@ export const getAuthorizedAthlete = async (
 // $ http GET "https://www.strava.com/api/v3/?before=&after=&page=&per_page=" "Authorization: Bearer [[token]]"
 
 export const getActivities = refreshTokenAsNeeded<
-  StravaTokenData,
+  StravaTokenData & PersistedStravaUser,
   StravaActivity[]
 >(async ({ expiresAt, refreshToken, accessToken }) => {
   const { data } = await axios.get<StravaActivity[]>(
