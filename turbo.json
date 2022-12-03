@@ -13,13 +13,15 @@
     "lint": {
       "outputs": []
     },
-    "start-containers": {},
+    "containers:start": {},
     "dev": {
-      "dependsOn": ["start-containers"]
+      "dependsOn": ["containers:start"]
     },
     "deploy": {
       "dependsOn": ["build", "test", "lint"],
       "outputs": []
-    }
+    },
+    "migrate:up": {},
+    "migrate:down": {}
   }
 }

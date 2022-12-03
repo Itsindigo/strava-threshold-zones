@@ -14,7 +14,11 @@
     "test": "turbo run test",
     "lint": "turbo run lint",
     "dev": "turbo run dev",
-    "start-containers": "turbo run start-containers"
+    "dev:api": "yarn workspace api dev",
+    "dev:web": "yarn workspace web dev",
+    "containers:start": "turbo run containers:start",
+    "migrate:up": "turbo run migrate:up",
+    "migrate:down": "turbo run migrate:down"
   },
   "devDependencies": {
     "turbo": "^1.6.3"

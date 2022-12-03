@@ -1,5 +1,6 @@
 import { saveStravaUser, findStravaUser } from "../repositories/strava_users";
 import { getAuthorizedAthlete, getActivities } from "../clients/strava";
+import { StravaActivity } from "src/clients/strava/types";
 
 export const authorizeAndSaveUser = async (code: string) => {
   const data = await getAuthorizedAthlete(code);
@@ -18,14 +19,22 @@ export const authorizeAndSaveUser = async (code: string) => {
   return user;
 };
 
-export const getUserActivities = async (userId: number) => {
+export const getUserActivities = async (
+  userId: number,
+  pageNumber: number = 1
+): Promise<StravaActivity[]> => {
   const user = await findStravaUser(userId);
 
   if (!user) {
     throw new Error("Could not find user");
   }
 
-  const activities = await getActivities(user);
+  const activities = await getActivities({
+    expiresAt: user.expiresAt,
+    refreshToken: user.refreshToken,
+    accessToken: user.accessToken,
+    pageNumber,
+  });
 
   return activities;
 };
