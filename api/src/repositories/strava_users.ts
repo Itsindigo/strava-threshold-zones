@@ -1,3 +1,4 @@
+import { SnakeCasedProperties } from "type-fest";
 import { sql } from "slonik";
 import { pool } from "../slonik";
 import { TABLE_NAMES } from "../config";
@@ -24,10 +25,10 @@ export const saveStravaUser = async ({
   refreshToken,
   accessToken,
   expiresAt,
-}: StravaUser) => {
+}: StravaUser): Promise<PersistedStravaUser> => {
   const {
     rows: [user],
-  } = await pool.query<PersistedStravaUser>(sql`
+  } = await pool.query<SnakeCasedProperties<PersistedStravaUser>>(sql`
     INSERT INTO ${sql.identifier([TABLE_NAMES.stravaUsers])} (
       strava_id,
       username,
@@ -51,17 +52,26 @@ export const saveStravaUser = async ({
       )}
     ) RETURNING (
       id,
-      strava_id as stravaId,
+      strava_id,
       username,
-      first_name as firstName,
-      last_name as lastName,
-      refresh_token as refreshToken,
-      access_token as accessToken,
-      expires_at as expiresAt
+      first_name,
+      last_name,
+      refresh_token,
+      access_token,
+      expires_at
     )
   `);
 
-  return user;
+  return {
+    id: user.id,
+    stravaId: user.strava_id,
+    username: user.username,
+    firstName: user.first_name,
+    lastName: user.last_name,
+    refreshToken: user.refresh_token,
+    accessToken: user.access_token,
+    expiresAt: user.expires_at,
+  };
 };
 
 export const findStravaUser = async (stravaUserId: number) => {
@@ -84,7 +94,7 @@ export const findStravaUser = async (stravaUserId: number) => {
   return user;
 };
 
-export const updateRefreshToken = (
+export const updateRefreshToken = async (
   oldToken: string,
   {
     refreshToken,

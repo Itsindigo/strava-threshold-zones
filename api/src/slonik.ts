@@ -1,6 +1,6 @@
-import { createPool, createTypeParserPreset } from "slonik";
+import { createPool, createTypeParserPreset, DatabasePool } from "slonik";
 import config from "./config";
 
-export const pool = createPool(config.db.uri, {
+export const pool: DatabasePool = createPool(config.db.uri, {
   typeParsers: [...createTypeParserPreset()],
 });
