@@ -1,6 +1,6 @@
+import { DetailedActivity } from "strava-types";
 import { saveStravaUser, findStravaUser } from "../repositories/strava_users";
 import { getAuthorizedAthlete, getActivities } from "../clients/strava";
-import { StravaActivity } from "src/clients/strava/types";
 
 export const authorizeAndSaveUser = async (code: string) => {
   const data = await getAuthorizedAthlete(code);
@@ -22,7 +22,7 @@ export const authorizeAndSaveUser = async (code: string) => {
 export const getUserActivities = async (
   userId: number,
   pageNumber: number = 1
-): Promise<StravaActivity[]> => {
+): Promise<DetailedActivity[]> => {
   const user = await findStravaUser(userId);
 
   if (!user) {

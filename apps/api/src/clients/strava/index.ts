@@ -8,9 +8,9 @@ import {
   GetNewRefreshTokenResponse,
   StravaTokenData,
   StravaAuthResponse,
-  StravaActivity,
 } from "./types";
 import { stravaApiBaseUrl } from "./constants";
+import { DetailedActivity } from "strava-types";
 
 export const getNewRefreshToken = async (
   refreshToken: string
@@ -83,13 +83,13 @@ export const getAuthorizedAthlete = async (
 
 export const getActivities = refreshTokenAsNeeded<
   StravaTokenData & { pageNumber: number; pageSize?: number },
-  StravaActivity[]
+  DetailedActivity[]
 >(async ({ accessToken, pageNumber, pageSize = 100 }) => {
   const searchParams = new URLSearchParams({
     per_page: `${pageSize}`,
     page: `${pageNumber}`,
   });
-  const { data } = await axios.get<StravaActivity[]>(
+  const { data } = await axios.get<DetailedActivity[]>(
     `${stravaApiBaseUrl}/athlete/activities?${searchParams}`,
     {
       headers: {

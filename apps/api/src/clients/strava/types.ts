@@ -21,11 +21,6 @@ export type StravaAthlete = {
   follower: null;
 };
 
-export interface StravaActivity {
-  id: number;
-  has_heartrate: boolean;
-}
-
 export interface StravaAuthResponse {
   token_type: string;
   expires_at: number;

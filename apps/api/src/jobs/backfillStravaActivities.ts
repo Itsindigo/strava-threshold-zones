@@ -1,12 +1,12 @@
+import { DetailedActivity } from "strava-types";
 import { logger } from "../logger";
 import { myStravaAthleteId } from "../constants";
 import { getUserActivities } from "../services/strava";
-import { StravaActivity } from "src/clients/strava/types";
 
 const getAllActivityPages = async (
   pageNumber: number,
-  activities: StravaActivity[]
-): Promise<StravaActivity[]> => {
+  activities: DetailedActivity[]
+): Promise<DetailedActivity[]> => {
   const page = await getUserActivities(myStravaAthleteId, pageNumber);
   if (page.length === 0) {
     return activities;
