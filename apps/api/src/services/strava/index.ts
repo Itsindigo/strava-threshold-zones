@@ -1,34 +1,50 @@
 import { DetailedActivity } from "strava-types";
-import { saveStravaUser, findStravaUser } from "../repositories/strava_users";
-import { getAuthorizedAthlete, getActivities } from "../clients/strava";
+import {
+  saveStravaUser,
+  findStravaUser,
+  PersistedStravaUser,
+} from "../../repositories/strava_users";
+import { encrypt, decrypt } from "../crypto";
+import { getAuthorizedAthlete, getActivities } from "../../clients/strava";
 
 export const authorizeAndSaveUser = async (code: string) => {
   const data = await getAuthorizedAthlete(code);
 
-  /* TODO encrypt tokens */
-  const user = await saveStravaUser({
+  const { stravaUserId } = await saveStravaUser({
     stravaId: data.athlete.id,
     username: data.athlete.username,
     firstName: data.athlete.firstname,
     lastName: data.athlete.lastname,
-    refreshToken: data.refresh_token,
-    accessToken: data.access_token,
+    refreshToken: JSON.stringify(encrypt(data.refresh_token)),
+    accessToken: JSON.stringify(encrypt(data.access_token)),
     expiresAt: data.expires_at,
   });
+
+  const user = await findStravaUserDecrypted(stravaUserId);
 
   return user;
 };
 
-export const getUserActivities = async (
-  userId: number,
-  pageNumber = 1
-): Promise<DetailedActivity[]> => {
-  const user = await findStravaUser(userId);
+export const findStravaUserDecrypted = async (
+  stravaId: number
+): Promise<PersistedStravaUser> => {
+  const user = await findStravaUser(stravaId);
 
   if (!user) {
     throw new Error("Could not find user");
   }
 
+  return {
+    ...user,
+    refreshToken: decrypt(JSON.parse(user.refreshToken)),
+    accessToken: decrypt(JSON.parse(user.accessToken)),
+  };
+};
+
+export const getUserActivities = async (
+  user: PersistedStravaUser,
+  pageNumber = 1
+): Promise<DetailedActivity[]> => {
   const activities = await getActivities({
     expiresAt: user.expiresAt,
     refreshToken: user.refreshToken,
@@ -39,16 +55,16 @@ export const getUserActivities = async (
   return activities;
 };
 
-export const getAllActivityPages = async (
-  athleteId: number,
+export const getAllAthleteActivityPages = async (
+  user: PersistedStravaUser,
   pageNumber: number,
   activities: DetailedActivity[]
 ): Promise<DetailedActivity[]> => {
-  const page = await getUserActivities(athleteId, pageNumber);
+  const page = await getUserActivities(user, pageNumber);
   if (page.length === 0) {
     return activities;
   }
-  return getAllActivityPages(athleteId, pageNumber + 1, [
+  return getAllAthleteActivityPages(user, pageNumber + 1, [
     ...activities,
     ...page,
   ]);

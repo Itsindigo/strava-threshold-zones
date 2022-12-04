@@ -1,10 +1,16 @@
 import { logger } from "../logger";
 import { myStravaAthleteId } from "../constants";
-import { getUserActivities } from "../services/strava";
+import { findStravaUserDecrypted, getUserActivities } from "../services/strava";
 
 const main = async () => {
-  const activities = await getUserActivities(myStravaAthleteId);
-  console.log(activities.find((activity) => activity.has_heartrate));
+  const user = await findStravaUserDecrypted(myStravaAthleteId);
+
+  if (!user) {
+    throw new Error("Could not find user");
+  }
+
+  const activities = await getUserActivities(user);
+  console.log(activities[0]);
 };
 
 main()

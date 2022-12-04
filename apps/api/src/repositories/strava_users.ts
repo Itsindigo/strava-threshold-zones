@@ -25,10 +25,10 @@ export const saveStravaUser = async ({
   refreshToken,
   accessToken,
   expiresAt,
-}: StravaUser): Promise<PersistedStravaUser> => {
+}: StravaUser): Promise<{ stravaUserId: number }> => {
   const {
-    rows: [user],
-  } = await pool.query<SnakeCasedProperties<PersistedStravaUser>>(sql`
+    rows: [{ strava_id: stravaUserId }],
+  } = await pool.query<{ strava_id: number }>(sql`
     INSERT INTO ${sql.identifier([TABLE_NAMES.stravaUsers])} (
       strava_id,
       username,
@@ -51,30 +51,18 @@ export const saveStravaUser = async ({
         sql`, `
       )}
     ) RETURNING (
-      id,
-      strava_id,
-      username,
-      first_name,
-      last_name,
-      refresh_token,
-      access_token,
-      expires_at
+      strava_id
     )
   `);
 
   return {
-    id: user.id,
-    stravaId: user.strava_id,
-    username: user.username,
-    firstName: user.first_name,
-    lastName: user.last_name,
-    refreshToken: user.refresh_token,
-    accessToken: user.access_token,
-    expiresAt: user.expires_at,
+    stravaUserId,
   };
 };
 
-export const findStravaUser = async (stravaUserId: number) => {
+export const findStravaUser = async (
+  stravaUserId: number
+): Promise<PersistedStravaUser | undefined> => {
   const {
     rows: [user],
   } = await pool.query<PersistedStravaUser>(sql`

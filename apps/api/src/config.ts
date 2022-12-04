@@ -17,6 +17,9 @@ const getDbUri = () => {
 };
 
 const config = {
+  crypto: {
+    secretKey: env.get("CRYPTO_SECRET_KEY").required().asString(),
+  },
   db: {
     uri: getDbUri(),
   },
