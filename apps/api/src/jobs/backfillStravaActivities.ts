@@ -2,6 +2,7 @@ import { logger } from "../logger";
 import { myStravaAthleteId } from "../constants";
 import {
   findStravaUserDecrypted,
+  getAllAthleteActivityPages,
   getUserActivities,
   saveStravaActivities,
 } from "../services/strava";
@@ -13,7 +14,7 @@ const main = async () => {
     throw new Error("Could not find user");
   }
 
-  const activities = await getUserActivities(user);
+  const activities = await getAllAthleteActivityPages(user, 1, []);
 
   await saveStravaActivities(
     activities.map((activity) => ({
