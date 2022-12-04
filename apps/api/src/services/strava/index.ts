@@ -6,6 +6,10 @@ import {
 } from "../../repositories/strava_users";
 import { encrypt, decrypt } from "../crypto";
 import { getAuthorizedAthlete, getActivities } from "../../clients/strava";
+import {
+  batchSaveStravaActivities,
+  StravaActivity,
+} from "../../repositories/strava_activities";
 
 export const authorizeAndSaveUser = async (code: string) => {
   const data = await getAuthorizedAthlete(code);
@@ -68,6 +72,10 @@ export const getAllAthleteActivityPages = async (
     ...activities,
     ...page,
   ]);
+};
+
+export const saveStravaActivities = async (activities: StravaActivity[]) => {
+  return batchSaveStravaActivities(activities);
 };
 
 export const getAuthenticationURL = async () => {

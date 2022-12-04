@@ -1,21 +1,8 @@
-import { SnakeCasedProperties } from "type-fest";
+export * from "./types";
 import { sql } from "slonik";
-import { pool } from "../slonik";
-import { TABLE_NAMES } from "../config";
-
-export interface StravaUser {
-  stravaId: number;
-  username: string;
-  firstName: string;
-  lastName: string;
-  refreshToken: string;
-  accessToken: string;
-  expiresAt: number;
-}
-
-export interface PersistedStravaUser extends StravaUser {
-  id: number;
-}
+import { pool } from "../../slonik";
+import { TABLE_NAMES } from "../../config";
+import { StravaUser, PersistedStravaUser } from "./types";
 
 export const saveStravaUser = async ({
   stravaId,

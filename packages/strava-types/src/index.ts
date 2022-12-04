@@ -64,6 +64,7 @@ export type SmoothGradeStream = components["schemas"]["SmoothGradeStream"];
 
 /* Types with data missing in the API Spec */
 export type DetailedActivity = components["schemas"]["DetailedActivity"] & {
+  id: number;
   has_heartrate: boolean;
   average_heartrate?: number;
   max_heartrate?: number;

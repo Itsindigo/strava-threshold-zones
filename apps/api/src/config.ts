@@ -31,6 +31,7 @@ const config = {
 
 export const TABLE_NAMES = {
   stravaUsers: "strava_users",
+  stravaActivities: "strava_activities",
 };
 
 export default config;
