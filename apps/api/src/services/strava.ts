@@ -21,7 +21,7 @@ export const authorizeAndSaveUser = async (code: string) => {
 
 export const getUserActivities = async (
   userId: number,
-  pageNumber: number = 1
+  pageNumber = 1
 ): Promise<DetailedActivity[]> => {
   const user = await findStravaUser(userId);
 
@@ -37,6 +37,21 @@ export const getUserActivities = async (
   });
 
   return activities;
+};
+
+export const getAllActivityPages = async (
+  athleteId: number,
+  pageNumber: number,
+  activities: DetailedActivity[]
+): Promise<DetailedActivity[]> => {
+  const page = await getUserActivities(athleteId, pageNumber);
+  if (page.length === 0) {
+    return activities;
+  }
+  return getAllActivityPages(athleteId, pageNumber + 1, [
+    ...activities,
+    ...page,
+  ]);
 };
 
 export const getAuthenticationURL = async () => {

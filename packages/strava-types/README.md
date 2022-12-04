@@ -1,6 +1,6 @@
 # About
 
-Generates TS defintiions from the Strava API Doc.
+Generates TS defintions from the Strava API Doc.
 
 The strava API spec is written in Open API V2 (Swagger), but the openapi-typescript tool only supports v3.
 
