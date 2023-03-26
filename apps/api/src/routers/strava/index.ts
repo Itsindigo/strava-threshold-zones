@@ -1,7 +1,5 @@
 import { Context, Next } from "koa";
 import Router from "koa-router";
-
-import { logger } from "../../logger";
 import { authorizeAndSaveUser } from "../../services/strava";
 
 export const router = new Router({ prefix: "/strava" });
@@ -18,7 +16,6 @@ router.get("/callback", async (ctx: Context, next: Next) => {
   }
 
   const user = await authorizeAndSaveUser(code);
-  logger.info({ id: user.id, stravaId: user.stravaId }, "User created");
   ctx.status = 200;
   ctx.response.body = {
     ...user,

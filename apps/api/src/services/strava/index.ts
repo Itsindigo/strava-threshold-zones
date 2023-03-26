@@ -5,14 +5,28 @@ import {
   PersistedStravaUser,
 } from "../../repositories/strava_users";
 import { encrypt, decrypt } from "../crypto";
+import { logger } from "../../logger";
 import { getAuthorizedAthlete, getActivities } from "../../clients/strava";
 import {
   batchSaveStravaActivities,
   StravaActivity,
 } from "../../repositories/strava_activities";
+import { noop } from "../../utils/noop";
 
 export const authorizeAndSaveUser = async (code: string) => {
   const data = await getAuthorizedAthlete(code);
+
+  const existingUser = await findStravaUserDecrypted(data.athlete.id).catch(
+    noop
+  );
+
+  if (existingUser) {
+    logger.info(
+      { id: existingUser.id, stravaId: existingUser.stravaId },
+      "User found"
+    );
+    return existingUser;
+  }
 
   const { stravaUserId } = await saveStravaUser({
     stravaId: data.athlete.id,
@@ -26,6 +40,7 @@ export const authorizeAndSaveUser = async (code: string) => {
 
   const user = await findStravaUserDecrypted(stravaUserId);
 
+  logger.info({ id: user.id, stravaId: user.stravaId }, "User created");
   return user;
 };
 
