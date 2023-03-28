@@ -24,3 +24,14 @@ a {
     background: black;
   }
 }
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/Inter-Black.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
