@@ -5,13 +5,13 @@ type Variant = "primary" | "secondary" | "success" | "danger";
 
 const buttonBgColours: { [key in Variant]: string } = {
   primary: "bg-gradient-to-r from-teal-500 via-teal-600 to-teal-700",
-  secondary: "bg-orange-300",
-  success: "bg-green-300",
-  danger: "bg-red-300",
+  secondary: "bg-gradient-to-r from-orange-500 via-orange-600 to-orange-700",
+  success: "bg-gradient-to-r from-green-500 via-green-600 to-green-700",
+  danger: "bg-gradient-to-r from-red-500 via-red-600 to-red-700",
 };
 
 const buttonHoverColours: { [key in Variant]: string } = {
-  primary: "hover:bg-gradient-to-br",
+  primary: "hover:bg-gradient-to-br focus:bg-gradient-to-br",
   secondary: "hover:bg-orange-500",
   success: "hover:bg-green-500",
   danger: "hover:bg-red-500",
@@ -26,13 +26,13 @@ const buttonFontColours: { [key in Variant]: string } = {
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
-  className?: string;
+  extraClasses?: string;
   variant?: Variant;
 }
 
 const Button: React.FC<ButtonProps> = ({
   children,
-  className,
+  extraClasses = "",
   variant = "primary",
   ...rest
 }) => {
@@ -40,7 +40,8 @@ const Button: React.FC<ButtonProps> = ({
     buttonBgColours[variant],
     buttonFontColours[variant],
     buttonHoverColours[variant],
-    className
+    "py-2 px-2 font-semibold shadow-sm shadow-white",
+    extraClasses
   );
 
   return (
@@ -48,11 +49,6 @@ const Button: React.FC<ButtonProps> = ({
       {children}
     </button>
   );
-};
-
-Button.defaultProps = {
-  className: "",
-  variant: "primary",
 };
 
 export default Button;
