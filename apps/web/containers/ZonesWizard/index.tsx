@@ -3,6 +3,8 @@ import { SafeParseReturnType } from "zod";
 import { IFormData } from "./types";
 import { isValidAge, isValidHeartRate } from "./utils";
 import { ZonesWizardAgeStep } from "./ZonesWizardAgeStep";
+import { ZonesWizardMaximumHeartRateStep } from "./ZonesWizardMaximumHeartRateStep";
+import { ZonesWizardRestingHeartRateStep } from "./ZonesWizardRestingHeartRateStep";
 import { ZonesWizardStartStep } from "./ZonesWizardStartStep";
 
 export const ZonesWizard = () => {
@@ -12,14 +14,9 @@ export const ZonesWizard = () => {
     maxHeartRate: undefined,
     restingHeartRate: undefined,
   });
-  const [formError, setFormError] = useState<string[]>([]);
 
   const handleFormDataChange = (data: IFormData) => {
-    setFormData((prevData) => ({ ...prevData, ...data }));
-
-    console.log(`Called with`, data);
-
-    const { age, maxHeartRate, restingHeartRate } = formData;
+    const { age, maxHeartRate, restingHeartRate } = data;
     let parsedField: SafeParseReturnType<number, number> = {
       success: true,
       data: 0,
@@ -29,18 +26,18 @@ export const ZonesWizard = () => {
       case 0:
         break;
       case 1:
-        const ageParse = isValidAge.safeParse(age);
-        parsedField = ageParse;
+        parsedField = isValidAge.safeParse(age);
+        break;
       case 2:
-        parsedField = isValidHeartRate.safeParse(maxHeartRate);
-      case 3:
         parsedField = isValidHeartRate.safeParse(restingHeartRate);
+        break;
+      case 3:
+        parsedField = isValidHeartRate.safeParse(maxHeartRate);
+        break;
     }
 
     if (parsedField.success) {
       setFormData((prevData) => ({ ...prevData, step: prevData.step + 1 }));
-    } else {
-      setFormError(parsedField.error.errors.map((err) => err.message));
     }
   };
 
@@ -57,12 +54,14 @@ export const ZonesWizard = () => {
       handlePrev={() => {
         setFormData((prevData) => ({
           ...prevData,
-          age: undefined,
+          age: "",
           step: prevData.step - 1,
         }));
       }}
       handleNext={handleFormDataChange}
     />,
+    <ZonesWizardRestingHeartRateStep />,
+    <ZonesWizardMaximumHeartRateStep />,
   ];
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

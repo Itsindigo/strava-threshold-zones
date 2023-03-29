@@ -1,11 +1,17 @@
-import { ChangeEvent, useEffect, useRef } from "react";
+import {
+  ChangeEvent,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useRef,
+} from "react";
 import Button from "../../components/Button/Button";
 import { IFormData } from "./types";
 import { isValidAge } from "./utils";
 
 interface IProps {
   formData: IFormData;
-  setFormData: (formData: IFormData) => void;
+  setFormData: Dispatch<SetStateAction<IFormData>>;
   handlePrev: () => void;
   handleNext: (formData: IFormData) => void;
 }
@@ -19,9 +25,7 @@ export const ZonesWizardAgeStep = ({
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
+    inputRef.current?.focus();
   }, []);
 
   const handleAgeChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -43,8 +47,10 @@ export const ZonesWizardAgeStep = ({
           type="text"
           inputMode="numeric"
           className="
-            w-5/6 px-4 py-2 text-whiteborder rounded shadow-sm shadow-white focus:outline-none 
-            text-center caret-blue-300
+            w-5/6 px-4 py-2
+            text-whiteborder text-center
+            shadow-sm shadow-white caret-blue-300
+            focus:outline-none rounded
           "
           ref={inputRef}
           name="age"
@@ -54,16 +60,14 @@ export const ZonesWizardAgeStep = ({
       </div>
       <div className="flex flex-row-reverse space-x-reverse space-x-4 justify-center">
         <Button
-          extraClasses="w-1/6 "
+          extraClasses="w-1/6 min-w-[25%] md:min-w-[10%]"
           variant="primary"
-          onClick={() => {
-            handleNext({ ...formData, age: formData.age });
-          }}
+          onClick={() => handleNext({ ...formData })}
         >
           Next
         </Button>
         <Button
-          extraClasses="w-1/6 space-x-4"
+          extraClasses="w-1/6 min-w-[25%] md:min-w-[10%]"
           variant="secondary"
           onClick={handlePrev}
         >
