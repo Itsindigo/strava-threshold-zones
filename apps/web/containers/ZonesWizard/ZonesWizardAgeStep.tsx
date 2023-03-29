@@ -6,6 +6,7 @@ import {
   useRef,
 } from "react";
 import Button from "../../components/Button/Button";
+import InputField from "../../components/FormFields/InputField/InputField";
 import { IFormData } from "./types";
 import { isValidAge } from "./utils";
 
@@ -39,23 +40,14 @@ export const ZonesWizardAgeStep = ({
   return (
     <>
       <div className="flex flex-col items-center mb-16">
-        <label htmlFor="zones-age" className="mb-2">
-          How old are you?
-        </label>
-        <input
+        <InputField
           id="zones-age"
-          type="text"
-          inputMode="numeric"
-          className="
-            w-5/6 px-4 py-2
-            text-whiteborder text-center
-            shadow-sm shadow-white caret-blue-300
-            focus:outline-none rounded
-          "
-          ref={inputRef}
+          label="How old are you?"
           name="age"
           value={formData.age}
           onChange={handleAgeChange}
+          inputMode="numeric"
+          extraClasses="w-5/6 px-4 py-2"
         />
       </div>
       <div className="flex flex-row-reverse space-x-reverse space-x-4 justify-center">

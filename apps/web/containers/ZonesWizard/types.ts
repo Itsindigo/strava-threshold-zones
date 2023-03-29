@@ -1,6 +1,6 @@
 export interface IFormData {
   step: number;
-  age?: string;
+  age: string;
   maxHeartRate?: number;
   restingHeartRate?: number;
 }
