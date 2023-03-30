@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, RefObject } from "react";
 
 interface IProps {
   id: string;
@@ -9,6 +9,7 @@ interface IProps {
   value: string;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   extraClasses?: string;
+  inputRef?: RefObject<any>;
 }
 
 const InputField = ({
@@ -19,6 +20,7 @@ const InputField = ({
   value,
   onChange,
   extraClasses,
+  inputRef,
 }: IProps) => {
   const classes = classNames(
     `text-white border text-center
@@ -39,6 +41,7 @@ const InputField = ({
         name={name}
         value={value}
         onChange={onChange}
+        ref={inputRef}
       />
     </>
   );
