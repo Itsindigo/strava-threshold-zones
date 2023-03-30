@@ -6,17 +6,20 @@ import {
   useRef,
 } from "react";
 import InputField from "../../components/FormFields/InputField/InputField";
+import { ErrorMessageContainer } from "./Components/ErrorMessageContainer";
 import { IFormData } from "./types";
 import { isValidHeartRate } from "./utils";
 
 interface IProps {
   formData: IFormData;
   setFormData: Dispatch<SetStateAction<IFormData>>;
+  errorMessages?: string[];
 }
 
 export const ZonesWizardMaximumHeartRateStep = ({
   formData,
   setFormData,
+  errorMessages = [],
 }: IProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -28,6 +31,8 @@ export const ZonesWizardMaximumHeartRateStep = ({
     const heartRateParse = isValidHeartRate.safeParse(event.target.value);
 
     if (heartRateParse.success) {
+      setFormData({ ...formData, maxHeartRate: event.target.value });
+    } else if (event.target.value === "") {
       setFormData({ ...formData, maxHeartRate: event.target.value });
     }
   };
@@ -45,6 +50,7 @@ export const ZonesWizardMaximumHeartRateStep = ({
           inputRef={inputRef}
           extraClasses="w-5/6 px-4 py-2"
         />
+        <ErrorMessageContainer errorMessages={errorMessages} />
       </div>
     </>
   );

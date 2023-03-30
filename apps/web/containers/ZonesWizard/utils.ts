@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { emptyStringIsUndefined } from "../../utils";
+import { ERROR_AGE_MESSAGE, ERROR_HEART_RATE_MESSAGE } from "./constants";
 
 /**
  * zod parses an empty string to zero which erroneuously
@@ -10,10 +11,22 @@ import { emptyStringIsUndefined } from "../../utils";
  */
 export const isValidAge = z.preprocess(
   (val) => emptyStringIsUndefined(val),
-  z.coerce.number().gte(0).lte(150)
+  z.coerce
+    .number({ invalid_type_error: ERROR_AGE_MESSAGE })
+    .gte(1, { message: ERROR_AGE_MESSAGE })
+    .lte(150, { message: ERROR_AGE_MESSAGE })
 );
 
 export const isValidHeartRate = z.preprocess(
   (val) => emptyStringIsUndefined(val),
-  z.coerce.number().gte(0).lte(300)
+  z.coerce
+    .number({ invalid_type_error: ERROR_HEART_RATE_MESSAGE })
+    .gte(1, { message: ERROR_HEART_RATE_MESSAGE })
+    .lte(300, { message: ERROR_HEART_RATE_MESSAGE })
 );
+
+export const validateFormData = z.object({
+  age: isValidAge,
+  restingHeartRate: isValidHeartRate,
+  maxHeartRate: isValidHeartRate,
+});

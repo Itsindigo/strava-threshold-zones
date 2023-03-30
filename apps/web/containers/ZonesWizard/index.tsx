@@ -1,20 +1,35 @@
+import { useRouter } from "next/router";
 import { useState } from "react";
-import { SafeParseReturnType } from "zod";
+import { SafeParseReturnType, ZodError, ZodIssue } from "zod";
 import Button from "../../components/Button/Button";
-import { IFormData } from "./types";
-import { isValidAge, isValidHeartRate } from "./utils";
+import { enumerateArray } from "../../utils/enumerate_array";
+import { FieldError, IFormData } from "./types";
+import { isValidAge, isValidHeartRate, validateFormData } from "./utils";
 import { ZonesWizardAgeStep } from "./ZonesWizardAgeStep";
 import { ZonesWizardMaximumHeartRateStep } from "./ZonesWizardMaximumHeartRateStep";
 import { ZonesWizardRestingHeartRateStep } from "./ZonesWizardRestingHeartRateStep";
 import { ZonesWizardStartStep } from "./ZonesWizardStartStep";
 
 export const ZonesWizard = () => {
+  const router = useRouter();
   const [formData, setFormData] = useState<IFormData>({
     step: 0,
     age: "",
     restingHeartRate: "",
     maxHeartRate: "",
   });
+  const [formErrors, setFormErrors] = useState<FieldError[]>([]);
+
+  const stepToFieldMap = enumerateArray(1, [
+    "age",
+    "restingHeartRate",
+    "maxHeartRate",
+  ]);
+
+  const errorToDisplay = formErrors.find(
+    (error: FieldError) => error.field === stepToFieldMap[formData.step]
+  );
+  const errorMessages = errorToDisplay ? [errorToDisplay.message] : [];
 
   const revertData = (formData: IFormData): IFormData => {
     switch (formData.step) {
@@ -32,6 +47,7 @@ export const ZonesWizard = () => {
   };
 
   const handleFormDataChange = (data: IFormData) => {
+    setFormErrors(() => []);
     const { age, maxHeartRate, restingHeartRate } = data;
     let parsedField: SafeParseReturnType<any, any> = {
       success: true,
@@ -62,8 +78,23 @@ export const ZonesWizard = () => {
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    console.log("Is this being called?");
     e.preventDefault();
+    const parsed = validateFormData.safeParse(formData);
+
+    if (!parsed.success) {
+      setFormErrors(
+        parsed.error.errors.map((err: ZodIssue) => {
+          const errorPath = err.path[0] as keyof IFormData;
+          return { field: errorPath, message: err.message };
+        })
+      );
+      return;
+    }
+
+    router.push({
+      pathname: "/summary",
+      query: { f: JSON.stringify(formData) },
+    });
   };
 
   const steps = [
@@ -73,14 +104,20 @@ export const ZonesWizard = () => {
       }
       formData={formData}
     />,
-    <ZonesWizardAgeStep formData={formData} setFormData={setFormData} />,
+    <ZonesWizardAgeStep
+      formData={formData}
+      setFormData={setFormData}
+      errorMessages={errorMessages}
+    />,
     <ZonesWizardRestingHeartRateStep
       formData={formData}
       setFormData={setFormData}
+      errorMessages={errorMessages}
     />,
     <ZonesWizardMaximumHeartRateStep
       formData={formData}
       setFormData={setFormData}
+      errorMessages={errorMessages}
     />,
   ];
 

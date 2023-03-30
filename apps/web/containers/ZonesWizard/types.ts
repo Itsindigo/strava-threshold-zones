@@ -4,3 +4,5 @@ export interface IFormData {
   restingHeartRate: string;
   maxHeartRate: string;
 }
+
+export type FieldError = { field: keyof IFormData; message: string };
