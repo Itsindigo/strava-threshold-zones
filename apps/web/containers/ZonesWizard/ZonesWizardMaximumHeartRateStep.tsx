@@ -37,9 +37,11 @@ export const ZonesWizardMaximumHeartRateStep = ({
     }
   };
 
+  const age = formData.age.length ? parseInt(formData.age, 10) : 0;
+
   return (
     <>
-      <div className="flex flex-col items-center mb-16">
+      <div className="flex flex-col items-center mb-8">
         <InputField
           id="zones-max-hr"
           label="What is your maximum heart rate?"
@@ -48,7 +50,8 @@ export const ZonesWizardMaximumHeartRateStep = ({
           onChange={handleHeartRateChange}
           inputMode="numeric"
           inputRef={inputRef}
-          extraClasses="w-5/6 px-4 py-2"
+          extraClasses="w-5/6 px-4 py-2 placeholder-center"
+          placeholder={`Suggestion based on your age: ${220 - age}`}
         />
         <ErrorMessageContainer errorMessages={errorMessages} />
       </div>

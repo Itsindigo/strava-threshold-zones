@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { emptyStringIsUndefined } from "../../utils";
 import { ERROR_AGE_MESSAGE, ERROR_HEART_RATE_MESSAGE } from "./constants";
+import { IZoneCalculatorConstructor, ZoneCalculator, Range } from "./types";
 
 /**
  * zod parses an empty string to zero which erroneuously

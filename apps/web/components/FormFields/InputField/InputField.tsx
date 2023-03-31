@@ -6,6 +6,7 @@ interface IProps {
   inputMode?: "text" | "numeric";
   label: string;
   name: string;
+  placeholder?: string;
   value: string;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   extraClasses?: string;
@@ -21,6 +22,7 @@ const InputField = ({
   onChange,
   extraClasses,
   inputRef,
+  placeholder,
 }: IProps) => {
   const classes = classNames(
     `text-white border text-center
@@ -42,6 +44,7 @@ const InputField = ({
         value={value}
         onChange={onChange}
         ref={inputRef}
+        placeholder={placeholder}
       />
     </>
   );
