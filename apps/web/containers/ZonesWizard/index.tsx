@@ -20,11 +20,10 @@ export const ZonesWizard = () => {
   });
   const [formErrors, setFormErrors] = useState<FieldError[]>([]);
 
-  const stepToFieldMap = enumerateArray(1, [
-    "age",
-    "restingHeartRate",
-    "maxHeartRate",
-  ]);
+  const stepToFieldMap = enumerateArray(
+    ["age", "restingHeartRate", "maxHeartRate"],
+    1
+  );
 
   const errorToDisplay = formErrors.find(
     (error: FieldError) => error.field === stepToFieldMap[formData.step]
